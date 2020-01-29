@@ -1,21 +1,25 @@
 package xyz.poketech.diy.ai;
 
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import xyz.poketech.diy.ConfigHandler;
 import xyz.poketech.diy.util.DyeUtil;
 import xyz.poketech.diy.util.WorldUtil;
 
-public class EntityAIEatFlower extends EntityAIBase {
+import java.util.EnumSet;
+
+public class EntityAIEatFlower extends Goal {
 
     /**
      * The entity owner of this AITask
      */
-    private final EntityLiving flowerEaterEntity;
+    private final MobEntity flowerEaterEntity;
 
     /**
      * The world the flower eater entity is eating from
@@ -27,10 +31,10 @@ public class EntityAIEatFlower extends EntityAIBase {
      */
     int eatingFlowerTimer;
 
-    public EntityAIEatFlower(EntityLiving flowerEaterEntityIn) {
+    public EntityAIEatFlower(MobEntity flowerEaterEntityIn) {
         this.flowerEaterEntity = flowerEaterEntityIn;
         this.entityWorld = flowerEaterEntityIn.world;
-        this.setMutexBits(7);
+        this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));
     }
 
     /**
@@ -77,7 +81,7 @@ public class EntityAIEatFlower extends EntityAIBase {
      * Keep ticking a continuous task that has already been started
      */
     @Override
-    public void updateTask() {
+    public void tick() {
         this.eatingFlowerTimer = Math.max(0, this.eatingFlowerTimer - 1);
 
         if (this.eatingFlowerTimer == 4) {
@@ -85,15 +89,15 @@ public class EntityAIEatFlower extends EntityAIBase {
 
             if (WorldUtil.isEntityOnFlower(this.flowerEaterEntity)) {
 
-                EnumDyeColor color = DyeUtil.getDyeForFlowerAt(this.entityWorld, blockpos);
-                if (this.entityWorld.getGameRules().getBoolean("mobGriefing")) {
+                DyeColor color = DyeUtil.getDyeForFlowerAt(this.entityWorld, blockpos);
+                if (this.entityWorld.getGameRules().getBoolean(GameRules.MOB_GRIEFING)) {
                     this.entityWorld.destroyBlock(blockpos, false);
                 }
 
                 this.flowerEaterEntity.eatGrassBonus();
 
-                if (this.flowerEaterEntity instanceof EntitySheep && ConfigHandler.general.sheepAbsorbColor) {
-                    EntitySheep sheep = (EntitySheep) this.flowerEaterEntity;
+                if (this.flowerEaterEntity instanceof SheepEntity && ConfigHandler.general.sheepAbsorbColor) {
+                    SheepEntity sheep = (SheepEntity) this.flowerEaterEntity;
                     sheep.setFleeceColor(color);
                 }
             }
@@ -101,7 +105,7 @@ public class EntityAIEatFlower extends EntityAIBase {
     }
 
     private BlockPos getBlockPos() {
-        return new BlockPos(this.flowerEaterEntity.posX, this.flowerEaterEntity.posY, this.flowerEaterEntity.posZ);
+        return new BlockPos(this.flowerEaterEntity.getPosX(), this.flowerEaterEntity.getPosY(), this.flowerEaterEntity.getPosZ());
     }
 
 }

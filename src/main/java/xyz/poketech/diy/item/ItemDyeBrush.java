@@ -1,43 +1,44 @@
 package xyz.poketech.diy.item;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.RandomUtils;
-import xyz.poketech.diy.DyeItYourself;
 import xyz.poketech.diy.network.PacketHandler;
 import xyz.poketech.diy.util.color.ColorUtil;
 import xyz.poketech.diy.util.color.NBTColorUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemDyeBrush extends Item {
 
     public ItemDyeBrush() {
+        super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
         setRegistryName("dye_brush");
-        setUnlocalizedName(DyeItYourself.MODID + ".dye_brush");
-        setMaxStackSize(1);
     }
 
     @Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+    public boolean itemInteractionForEntity(ItemStack stack, PlayerEntity playerIn, LivingEntity target, Hand hand) {
         if(!playerIn.world.isRemote) {
-            if(target instanceof EntitySheep) {
+            if(target instanceof SheepEntity) {
                 int color = NBTColorUtil.getColor(stack);
-                target.getEntityData().setInteger(NBTColorUtil.COLOR_KEY, color);
-                PacketHandler.sendColorUpdate(target.getEntityId(), color, target.getPosition(), playerIn.dimension, 25);
+                target.getPersistentData().putInt(NBTColorUtil.COLOR_KEY, color);
+                PacketHandler.sendColorUpdate(target.getEntityId(), color, target.getPosition(), playerIn.dimension.getId(), 25);
                 return true;
             }
         }
@@ -45,12 +46,13 @@ public class ItemDyeBrush extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if(!playerIn.world.isRemote && playerIn.isSneaking()) {
+    @Nonnull
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        if(!playerIn.world.isRemote && playerIn.getPose() == Pose.CROUCHING) {
             ItemStack itemStack = playerIn.getHeldItem(handIn);
 
-            if(itemStack.getTagCompound() == null) {
-                itemStack.setTagCompound(new NBTTagCompound());
+            if(itemStack.getTag() == null) {
+                itemStack.setTag(new CompoundNBT());
             }
 
             int r = RandomUtils.nextInt(0, 256);
@@ -59,20 +61,20 @@ public class ItemDyeBrush extends Item {
 
             int color = ColorUtil.getRGB(r,g,b);
 
-            itemStack.getTagCompound().setInteger(NBTColorUtil.COLOR_KEY, color);
+            itemStack.getTag().putInt(NBTColorUtil.COLOR_KEY, color);
 
-            playerIn.sendStatusMessage(new TextComponentTranslation("tooltip.diy.current_color", r, g,b), true);
+            playerIn.sendStatusMessage(new TranslationTextComponent("tooltip.diy.current_color", r, g,b), true);
         }
-        return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+        return new ActionResult<>(ActionResultType.PASS, playerIn.getHeldItem(handIn));
     }
 
     @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
 
         int[] rgb = ColorUtil.toRGB(NBTColorUtil.getColor(stack));
-        tooltip.add("WIP");
-        tooltip.add(I18n.format("tooltip.diy.current_color", rgb[0], rgb[1],rgb[2]));
-        tooltip.add(I18n.format("item.diy.dye_brush.tooltip"));
+        tooltip.add(new StringTextComponent("WIP"));
+        tooltip.add(new TranslationTextComponent("tooltip.diy.current_color", rgb[0], rgb[1],rgb[2]));
+        tooltip.add(new TranslationTextComponent("item.diy.dye_brush.tooltip"));
     }
 }

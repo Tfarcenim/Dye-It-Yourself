@@ -1,36 +1,41 @@
 package xyz.poketech.diy.client.render.layer;
 
-import net.minecraft.client.model.ModelSheep1;
-import net.minecraft.client.renderer.entity.RenderSheep;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.SheepRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.client.renderer.entity.model.SheepModel;
+import net.minecraft.client.renderer.entity.model.SheepWoolModel;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.ResourceLocation;
-import xyz.poketech.diy.util.color.NBTColorUtil;
 import xyz.poketech.diy.util.color.ColorUtil;
+import xyz.poketech.diy.util.color.NBTColorUtil;
 
 /**
  * Layer to override the sheep wool
- * Based on {@link net.minecraft.client.renderer.entity.layers.LayerSheepWool}
+ * Based on {@link net.minecraft.client.renderer.entity.layers.SheepWoolLayer}
  */
-public class LayerSheepWoolOverride implements LayerRenderer<EntitySheep> {
+public class LayerSheepWoolOverride extends LayerRenderer<SheepEntity, SheepModel<SheepEntity>> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/sheep/sheep_fur.png");
-    private final RenderSheep sheepRenderer;
-    private final ModelSheep1 sheepModel = new ModelSheep1();
+    private final SheepRenderer sheepRenderer;
+    private final SheepWoolModel sheepModel = new SheepWoolModel();
 
-    public LayerSheepWoolOverride(RenderSheep sheepRendererIn) {
+    public LayerSheepWoolOverride(SheepRenderer sheepRendererIn) {
+        super(sheepRendererIn);
         this.sheepRenderer = sheepRendererIn;
     }
 
-    public void doRenderLayer(EntitySheep entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    @Override
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, SheepEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 
         if (!entitylivingbaseIn.getSheared() && !entitylivingbaseIn.isInvisible()) {
 
             //Only render if a color is set
-            if (entitylivingbaseIn.getEntityData().hasKey(NBTColorUtil.COLOR_KEY)) {
+            if (entitylivingbaseIn.getPersistentData().contains(NBTColorUtil.COLOR_KEY)) {
 
                 if(entitylivingbaseIn.hasCustomName()) {
-                    if("jeb_".equals(entitylivingbaseIn.getCustomNameTag())) {
+                    if(entitylivingbaseIn.getCustomName().getFormattedText().equals("jeb_"))) {
                         return; //Don't render on top of jeb_ sheep
                     }
                 }

@@ -1,14 +1,20 @@
 package xyz.poketech.diy.handler;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import xyz.poketech.diy.ConfigHandler;
@@ -26,11 +32,11 @@ public class LivingHandler {
 
     @SubscribeEvent
     public static void onEntitySpawn(LivingSpawnEvent.EnteringChunk event) {
-        if (event.getEntity() instanceof EntitySheep) {
-            EntitySheep sheep = ((EntitySheep) event.getEntity());
+        if (event.getEntity() instanceof SheepEntity) {
+            SheepEntity sheep = ((SheepEntity) event.getEntity());
 
             if (ConfigHandler.general.sheepEatFlowers) {
-                sheep.tasks.addTask(5, new EntityAIEatFlower(sheep));
+                sheep.goalSelector.addGoal(5, new EntityAIEatFlower(sheep));
             }
         }
     }
@@ -39,7 +45,7 @@ public class LivingHandler {
     public static void onEntityEnterWorld(EntityJoinWorldEvent event) {
         //Sync the sheep color on the client
         if(event.getWorld().isRemote) {
-            if(event.getEntity() instanceof EntitySheep) {
+            if(event.getEntity() instanceof SheepEntity) {
                 DyeItYourself.NETWORK.sendToServer(new PacketRequestColor(event.getEntity().getEntityId()));
             }
         }
@@ -47,19 +53,19 @@ public class LivingHandler {
 
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        EntityLivingBase entity = event.getEntityLiving();
-        if (!entity.world.isRemote && ConfigHandler.dyeDrop.doDropDye && entity instanceof EntitySheep) {
+        LivingEntity entity = event.getEntityLiving();
+        if (!entity.world.isRemote && ConfigHandler.dyeDrop.doDropDye && entity instanceof SheepEntity) {
 
-            EntitySheep sheep = (EntitySheep) event.getEntityLiving();
-            NBTTagCompound data = sheep.getEntityData();
+            SheepEntity sheep = (SheepEntity) event.getEntityLiving();
+            CompoundNBT data = sheep.getPersistentData();
 
-            if (data.hasKey(NEXT_DYE_KEY)) {
-                int nextDye = data.getInteger(NEXT_DYE_KEY);
+            if (data.contains(NEXT_DYE_KEY)) {
+                int nextDye = data.getInt(NEXT_DYE_KEY);
                 if (nextDye == 1) {
                     //Spawn a random amount of dye
                     int count = RandomUtil.getDyeDropAmountSafe();
                     if(count != 0) {
-                        WorldUtil.spawnStack(sheep.world, sheep.getPosition(), new ItemStack(Items.DYE, count, sheep.getFleeceColor().getDyeDamage()));
+                        WorldUtil.spawnStack(sheep.world, sheep.getPosition(), new ItemStack(DyeItem.getItem(sheep.getFleeceColor()), count));
 
                         //Play the chicken egg sound
                         float pitch = (sheep.getRNG().nextFloat() - sheep.getRNG().nextFloat()) * 0.2F + 1.0F;
@@ -67,12 +73,12 @@ public class LivingHandler {
                     }
 
                     //Set new dye
-                    data.setInteger(NEXT_DYE_KEY, RandomUtil.getNextDye());
+                    data.putInt(NEXT_DYE_KEY, RandomUtil.getNextDye());
                 } else {
-                    data.setInteger(NEXT_DYE_KEY, --nextDye);
+                    data.putInt(NEXT_DYE_KEY, --nextDye);
                 }
             } else {
-                data.setInteger(NEXT_DYE_KEY, RandomUtil.getNextDye());
+                data.putInt(NEXT_DYE_KEY, RandomUtil.getNextDye());
             }
         }
     }
