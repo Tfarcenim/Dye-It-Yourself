@@ -1,6 +1,5 @@
 package xyz.poketech.diy.ai;
 
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.SheepEntity;
@@ -8,7 +7,7 @@ import net.minecraft.item.DyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import xyz.poketech.diy.ConfigHandler;
+import xyz.poketech.diy.DyeItYourself;
 import xyz.poketech.diy.util.DyeUtil;
 import xyz.poketech.diy.util.WorldUtil;
 
@@ -96,7 +95,7 @@ public class EntityAIEatFlower extends Goal {
 
                 this.flowerEaterEntity.eatGrassBonus();
 
-                if (this.flowerEaterEntity instanceof SheepEntity && ConfigHandler.general.sheepAbsorbColor) {
+                if (this.flowerEaterEntity instanceof SheepEntity && DyeItYourself.CONFIG.sheepAbsorbColor.get()) {
                     SheepEntity sheep = (SheepEntity) this.flowerEaterEntity;
                     sheep.setFleeceColor(color);
                 }

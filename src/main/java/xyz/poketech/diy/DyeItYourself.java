@@ -4,6 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -32,11 +33,14 @@ public final class DyeItYourself {
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
+    public static ConfigHandler CONFIG;
+
     public DyeItYourself() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
         DIYItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CONFIG = ConfigHelper.register(ModConfig.Type.SERVER, ConfigHandler::new);
     }
 
     public void setup(FMLCommonSetupEvent e) {

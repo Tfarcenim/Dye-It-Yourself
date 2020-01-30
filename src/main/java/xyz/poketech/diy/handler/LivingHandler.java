@@ -1,14 +1,9 @@
 package xyz.poketech.diy.handler;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundEvents;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -16,14 +11,11 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import xyz.poketech.diy.ConfigHandler;
 import xyz.poketech.diy.DyeItYourself;
 import xyz.poketech.diy.ai.EntityAIEatFlower;
 import xyz.poketech.diy.network.PacketRequestColor;
 import xyz.poketech.diy.util.RandomUtil;
 import xyz.poketech.diy.util.WorldUtil;
-
 
 @Mod.EventBusSubscriber(modid = DyeItYourself.MODID)
 public class LivingHandler {
@@ -35,7 +27,7 @@ public class LivingHandler {
         if (event.getEntity() instanceof SheepEntity) {
             SheepEntity sheep = ((SheepEntity) event.getEntity());
 
-            if (ConfigHandler.general.sheepEatFlowers) {
+            if (DyeItYourself.CONFIG.sheepEatFlowers.get()) {
                 sheep.goalSelector.addGoal(5, new EntityAIEatFlower(sheep));
             }
         }
@@ -54,7 +46,7 @@ public class LivingHandler {
     @SubscribeEvent
     public static void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if (!entity.world.isRemote && ConfigHandler.dyeDrop.doDropDye && entity instanceof SheepEntity) {
+        if (!entity.world.isRemote && DyeItYourself.CONFIG.doDropDye.get() && entity instanceof SheepEntity) {
 
             SheepEntity sheep = (SheepEntity) event.getEntityLiving();
             CompoundNBT data = sheep.getPersistentData();
