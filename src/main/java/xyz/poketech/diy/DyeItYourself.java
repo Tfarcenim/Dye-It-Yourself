@@ -35,6 +35,8 @@ public final class DyeItYourself {
     public DyeItYourself() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
+
+        DIYItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
     public void setup(FMLCommonSetupEvent e) {

@@ -27,9 +27,8 @@ import java.util.List;
 
 public class ItemDyeBrush extends Item {
 
-    public ItemDyeBrush() {
-        super(new Properties().group(ItemGroup.TOOLS).maxStackSize(1));
-        setRegistryName("dye_brush");
+    public ItemDyeBrush(Properties properties) {
+        super(properties);
     }
 
     @Override
@@ -38,7 +37,7 @@ public class ItemDyeBrush extends Item {
             if(target instanceof SheepEntity) {
                 int color = NBTColorUtil.getColor(stack);
                 target.getPersistentData().putInt(NBTColorUtil.COLOR_KEY, color);
-                PacketHandler.sendColorUpdate(target.getEntityId(), color, target.getPosition(), playerIn.dimension.getId(), 25);
+                PacketHandler.sendColorUpdate(target.getEntityId(), color, target.getPosition(), playerIn.dimension, 25);
                 return true;
             }
         }
