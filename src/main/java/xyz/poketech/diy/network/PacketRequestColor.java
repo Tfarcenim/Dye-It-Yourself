@@ -1,14 +1,17 @@
 package xyz.poketech.diy.network;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
+import xyz.poketech.diy.DyeItYourself;
 import xyz.poketech.diy.util.color.NBTColorUtil;
 
-public class PacketRequestColor implements IMessage {
+import java.util.function.Supplier;
+
+public class PacketRequestColor {
 
     private int entityID;
 
@@ -23,33 +26,26 @@ public class PacketRequestColor implements IMessage {
         this.entityID = entity.getEntityId();
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        entityID = buf.readInt();
+    public PacketRequestColor (PacketBuffer buf) {
+        this(buf.readInt());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
+    public void encode(PacketBuffer buf) {
         buf.writeInt(entityID);
     }
 
-    public static class ColorRequesthandler implements IMessageHandler<PacketRequestColor, PacketUpdateColor> {
-
-        @Override
-        public PacketUpdateColor onMessage(PacketRequestColor message, MessageContext ctx) {
-
-            EntityPlayerMP serverPlayer = ctx.getServerHandler().player;
-
-            Entity entity = serverPlayer.getServerWorld().getEntityByID(message.entityID);
-
-            if (entity != null && entity.getEntityData().hasKey(NBTColorUtil.COLOR_KEY)) {
-                int color = entity.getEntityData().getInteger(NBTColorUtil.COLOR_KEY);
-                return new PacketUpdateColor(message.entityID, color);
+    public void onMessage(Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            ServerPlayerEntity serverPlayer = ctx.get().getSender();
+            if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_SERVER && serverPlayer != null) {
+                Entity entity = serverPlayer.getServerWorld().getEntityByID(this.entityID);
+                if (entity != null && entity.getPersistentData().contains(NBTColorUtil.COLOR_KEY)) {
+                    int color = entity.getPersistentData().getInt(NBTColorUtil.COLOR_KEY);
+                    DyeItYourself.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new PacketUpdateColor(this.entityID, color));
+                }
             }
-            return null;
-        }
+        });
+        ctx.get().setPacketHandled(true);
     }
-
 }
-
 

@@ -1,17 +1,15 @@
 package xyz.poketech.diy.network;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import xyz.poketech.diy.util.color.NBTColorUtil;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class PacketUpdateColor implements IMessage {
+import java.util.function.Supplier;
+
+public class PacketUpdateColor {
 
     private int entityId;
     private int color;
@@ -28,47 +26,29 @@ public class PacketUpdateColor implements IMessage {
         this.color = color;
     }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.entityId = buf.readInt();
-        this.color = buf.readInt();
+    public PacketUpdateColor(PacketBuffer buf) {
+        this(buf.readInt(), buf.readInt());
     }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
+    public void encode(PacketBuffer buf) {
         buf.writeInt(this.entityId);
         buf.writeInt(this.color);
     }
 
 
-    @SideOnly(Side.CLIENT)
     public Entity getEntity(World worldIn) {
         return worldIn.getEntityByID(this.entityId);
     }
 
-    @SideOnly(Side.CLIENT)
     public int getColor() {
         return this.color;
     }
 
-    public static class ColorPacketHandler implements IMessageHandler<PacketUpdateColor, IMessage> {
-
-        @Override
-        public IMessage onMessage(PacketUpdateColor message, MessageContext ctx) {
-
-            World world = Minecraft.getMinecraft().world;
-
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-                Entity entity = world.getEntityByID(message.entityId);
-
-                if(entity != null) {
-                    int color = message.color;
-                    entity.getEntityData().setInteger(NBTColorUtil.COLOR_KEY, color);
-                }
-            });
-
-            return null;
-        }
+    public void onMessage(Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> DistExecutor.runWhenOn(
+                Dist.CLIENT, () -> () -> DistHelper.updateSheepColor(this.entityId, this.color)
+        ));
+        ctx.get().setPacketHandled(true);
     }
 
 }
