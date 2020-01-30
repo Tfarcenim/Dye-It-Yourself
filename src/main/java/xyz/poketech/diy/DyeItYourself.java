@@ -29,8 +29,6 @@ public final class DyeItYourself {
             PROTOCOL_VERSION::equals
     );
 
-    private static final DyeItYourself INSTANCE = new DyeItYourself();
-
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
     public static ConfigHandler CONFIG;
