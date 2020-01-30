@@ -1,18 +1,18 @@
 package xyz.poketech.diy;
 
-import net.minecraft.launchwrapper.Launch;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import xyz.poketech.diy.proxy.CommonProxy;
+import xyz.poketech.diy.network.DistHelper;
+import xyz.poketech.diy.network.PacketHandler;
 
 @Mod.EventBusSubscriber
 @Mod(DyeItYourself.MODID)
@@ -32,25 +32,16 @@ public final class DyeItYourself {
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    private DyeItYourself() {}
-
-    @Mod.InstanceFactory
-    public static DyeItYourself getInstance() {
-        return INSTANCE;
+    public DyeItYourself() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
     }
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent e){
-        proxy.preInit(e);
+    public void setup(FMLCommonSetupEvent e) {
+        PacketHandler.registerMessages();
     }
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent e) {
-        proxy.init(e);
-    }
-
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
-        proxy.postInit(e);
+    public void clientSetup(FMLClientSetupEvent e) {
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> DistHelper::addRenderLayers);
     }
 }
