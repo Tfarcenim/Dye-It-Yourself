@@ -6,7 +6,6 @@ import net.minecraft.entity.Pose;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
@@ -25,9 +24,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemDyeBrush extends Item {
+public class DyeBrushItem extends Item {
 
-    public ItemDyeBrush(Properties properties) {
+    public DyeBrushItem(Properties properties) {
         super(properties);
     }
 

@@ -13,7 +13,7 @@ import xyz.poketech.diy.util.WorldUtil;
 
 import java.util.EnumSet;
 
-public class EntityAIEatFlower extends Goal {
+public class EatFlowerGoal extends Goal {
 
     /**
      * The entity owner of this AITask
@@ -30,7 +30,7 @@ public class EntityAIEatFlower extends Goal {
      */
     int eatingFlowerTimer;
 
-    public EntityAIEatFlower(MobEntity flowerEaterEntityIn) {
+    public EatFlowerGoal(MobEntity flowerEaterEntityIn) {
         this.flowerEaterEntity = flowerEaterEntityIn;
         this.entityWorld = flowerEaterEntityIn.world;
         this.setMutexFlags(EnumSet.of(Flag.MOVE, Flag.LOOK, Flag.JUMP));

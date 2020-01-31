@@ -16,12 +16,12 @@ import xyz.poketech.diy.util.color.NBTColorUtil;
  * Layer to override the sheep wool
  * Based on {@link net.minecraft.client.renderer.entity.layers.SheepWoolLayer}
  */
-public class LayerSheepWoolOverride extends LayerRenderer<SheepEntity, SheepModel<SheepEntity>> {
+public class SheepWoolLayerOverride extends LayerRenderer<SheepEntity, SheepModel<SheepEntity>> {
 
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/sheep/sheep_fur.png");
     private final SheepWoolModel<SheepEntity> sheepModel = new SheepWoolModel<>();
 
-    public LayerSheepWoolOverride(SheepRenderer sheepRendererIn) {
+    public SheepWoolLayerOverride(SheepRenderer sheepRendererIn) {
         super(sheepRendererIn);
     }
 

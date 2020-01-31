@@ -12,24 +12,24 @@ public class PacketHandler {
 
         DyeItYourself.NETWORK.registerMessage(
                 id++,
-                PacketRequestColor.class,
-                PacketRequestColor::encode,
-                PacketRequestColor::new,
-                PacketRequestColor::onMessage
+                RequestColorPacket.class,
+                RequestColorPacket::encode,
+                RequestColorPacket::new,
+                RequestColorPacket::onMessage
         );
         DyeItYourself.NETWORK.registerMessage(
                 id++,
-                PacketUpdateColor.class,
-                PacketUpdateColor::encode,
-                PacketUpdateColor::new,
-                PacketUpdateColor::onMessage
+                UpdateColorPacket.class,
+                UpdateColorPacket::encode,
+                UpdateColorPacket::new,
+                UpdateColorPacket::onMessage
         );
     }
 
     public static void sendColorUpdate(int target, int color, BlockPos pos, DimensionType dimension, int range) {
         DyeItYourself.NETWORK.send(
                 PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.getX(), pos.getY(), pos.getZ(), range, dimension)),
-                new PacketUpdateColor(target,  color)
+                new UpdateColorPacket(target,  color)
         );
     }
 }

@@ -12,8 +12,8 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import xyz.poketech.diy.DyeItYourself;
-import xyz.poketech.diy.ai.EntityAIEatFlower;
-import xyz.poketech.diy.network.PacketRequestColor;
+import xyz.poketech.diy.ai.EatFlowerGoal;
+import xyz.poketech.diy.network.RequestColorPacket;
 import xyz.poketech.diy.util.RandomUtil;
 import xyz.poketech.diy.util.WorldUtil;
 
@@ -28,7 +28,7 @@ public class LivingHandler {
             SheepEntity sheep = ((SheepEntity) event.getEntity());
 
             if (DyeItYourself.CONFIG.sheepEatFlowers.get()) {
-                sheep.goalSelector.addGoal(5, new EntityAIEatFlower(sheep));
+                sheep.goalSelector.addGoal(5, new EatFlowerGoal(sheep));
             }
         }
     }
@@ -38,7 +38,7 @@ public class LivingHandler {
         //Sync the sheep color on the client
         if(event.getWorld().isRemote) {
             if(event.getEntity() instanceof SheepEntity) {
-                DyeItYourself.NETWORK.sendToServer(new PacketRequestColor(event.getEntity().getEntityId()));
+                DyeItYourself.NETWORK.sendToServer(new RequestColorPacket(event.getEntity().getEntityId()));
             }
         }
     }

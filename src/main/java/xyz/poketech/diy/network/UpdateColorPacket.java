@@ -9,24 +9,24 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class PacketUpdateColor {
+public class UpdateColorPacket {
 
     private int entityId;
     private int color;
 
-    public PacketUpdateColor() {
+    public UpdateColorPacket() {
     }
 
-    public PacketUpdateColor(Entity entityIn, int color) {
+    public UpdateColorPacket(Entity entityIn, int color) {
         this(entityIn.getEntityId(), color);
     }
 
-    public PacketUpdateColor(int entityId, int color) {
+    public UpdateColorPacket(int entityId, int color) {
         this.entityId = entityId;
         this.color = color;
     }
 
-    public PacketUpdateColor(PacketBuffer buf) {
+    public UpdateColorPacket(PacketBuffer buf) {
         this(buf.readInt(), buf.readInt());
     }
 

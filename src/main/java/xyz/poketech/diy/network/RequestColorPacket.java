@@ -11,22 +11,22 @@ import xyz.poketech.diy.util.color.NBTColorUtil;
 
 import java.util.function.Supplier;
 
-public class PacketRequestColor {
+public class RequestColorPacket {
 
     private int entityID;
 
-    public PacketRequestColor() {
+    public RequestColorPacket() {
     }
 
-    public PacketRequestColor(int entityID) {
+    public RequestColorPacket(int entityID) {
         this.entityID = entityID;
     }
 
-    PacketRequestColor(Entity entity) {
+    RequestColorPacket(Entity entity) {
         this.entityID = entity.getEntityId();
     }
 
-    public PacketRequestColor (PacketBuffer buf) {
+    public RequestColorPacket(PacketBuffer buf) {
         this(buf.readInt());
     }
 
@@ -41,7 +41,7 @@ public class PacketRequestColor {
                 Entity entity = serverPlayer.getServerWorld().getEntityByID(this.entityID);
                 if (entity != null && entity.getPersistentData().contains(NBTColorUtil.COLOR_KEY)) {
                     int color = entity.getPersistentData().getInt(NBTColorUtil.COLOR_KEY);
-                    DyeItYourself.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new PacketUpdateColor(this.entityID, color));
+                    DyeItYourself.NETWORK.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new UpdateColorPacket(this.entityID, color));
                 }
             }
         });
