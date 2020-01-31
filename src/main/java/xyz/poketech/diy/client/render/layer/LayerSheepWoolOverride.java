@@ -12,8 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import xyz.poketech.diy.util.color.ColorUtil;
 import xyz.poketech.diy.util.color.NBTColorUtil;
 
-import java.awt.*;
-
 /**
  * Layer to override the sheep wool
  * Based on {@link net.minecraft.client.renderer.entity.layers.SheepWoolLayer}
@@ -35,9 +33,9 @@ public class LayerSheepWoolOverride extends LayerRenderer<SheepEntity, SheepMode
                 if(entitylivingbaseIn.hasCustomName() && "jeb_".equals(entitylivingbaseIn.getCustomName().getUnformattedComponentText())) {
                     return; //Don't render on top of jeb_ sheep
                 }
+                Vector3f color = ColorUtil.toFloat(entitylivingbaseIn.getPersistentData().getInt(NBTColorUtil.COLOR_KEY));
+                renderCopyCutoutModel(this.getEntityModel(), this.sheepModel, TEXTURE, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, color.getX(), color.getY(), color.getZ());
             }
-            Vector3f color = ColorUtil.toFloat(entitylivingbaseIn.getPersistentData().getInt(NBTColorUtil.COLOR_KEY));
-            renderCopyCutoutModel(this.getEntityModel(), this.sheepModel, TEXTURE, matrixStackIn, bufferIn, packedLightIn, entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, color.getX(), color.getY(), color.getZ());
         }
     }
 
