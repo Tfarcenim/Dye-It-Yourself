@@ -2,9 +2,7 @@ package xyz.poketech.diy.util.color;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-
-import java.awt.*;
+import net.minecraft.nbt.CompoundNBT;
 
 public class NBTColorUtil {
 
@@ -12,7 +10,7 @@ public class NBTColorUtil {
     private static final int WHITE = ColorUtil.getRGB(255, 255, 255);
 
     public static void setEntityColor(Entity entity, int color) {
-        entity.getEntityData().setInteger(COLOR_KEY, color);
+        entity.getPersistentData().putInt(COLOR_KEY, color);
     }
 
     public static void setEntityColor(Entity entity, int r, int g, int b) {
@@ -20,20 +18,20 @@ public class NBTColorUtil {
     }
 
     public static void removeEntityColor(Entity entity) {
-        entity.getEntityData().removeTag(COLOR_KEY);
+        entity.getPersistentData().remove(COLOR_KEY);
     }
 
     public static int getColor(ItemStack stack) {
-        if(stack.getTagCompound() != null) {
-            if(stack.getTagCompound().hasKey(COLOR_KEY)) {
-                return stack.getTagCompound().getInteger(COLOR_KEY);
+        if(stack.getTag() != null) {
+            if(stack.getTag().contains(COLOR_KEY)) {
+                return stack.getTag().getInt(COLOR_KEY);
             } else {
-                stack.getTagCompound().setInteger(COLOR_KEY, WHITE);
+                stack.getTag().putInt(COLOR_KEY, WHITE);
             }
         } else {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setInteger(COLOR_KEY, WHITE);
-            stack.setTagCompound(tag);
+            CompoundNBT tag = new CompoundNBT();
+            tag.putInt(COLOR_KEY, WHITE);
+            stack.setTag(tag);
         }
         return WHITE;
     }

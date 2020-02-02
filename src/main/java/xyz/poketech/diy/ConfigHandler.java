@@ -1,63 +1,61 @@
 package xyz.poketech.diy;
 
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-@Config(modid = DyeItYourself.MODID, name = DyeItYourself.MODID + "/" + DyeItYourself.MODID, category = "")
-@Mod.EventBusSubscriber(modid = DyeItYourself.MODID)
 public class ConfigHandler {
 
-    @Config.Comment({"General settings"})
-    @Config.LangKey("config.diy.general")
-    public static ConfigGeneral general = new ConfigGeneral();
+    final public ConfigHelper.ConfigValueListener<Boolean> doDropDye;
 
-    @Config.Comment({"Dye drop settings"})
-    @Config.LangKey("config.diy.dye_dropping")
-    public static ConfigDyeDrop dyeDrop = new ConfigDyeDrop();
+    final public ConfigHelper.ConfigValueListener<Integer> rngUpperBoundTime;
 
-    @SubscribeEvent
-    public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equals(DyeItYourself.MODID)) {
-            ConfigManager.sync(event.getModID(), Config.Type.INSTANCE);
-        }
-    }
+    final public ConfigHelper.ConfigValueListener<Integer> rngLowerBoundTime;
 
-    public static class ConfigDyeDrop {
+    final public ConfigHelper.ConfigValueListener<Integer> maxDyeDrop;
 
-        @Config.Comment({"Sheeps should drop dye"})
-        @Config.LangKey("config.diy.sheep_drop_dye")
-        public boolean doDropDye = true;
+    final public ConfigHelper.ConfigValueListener<Integer> minDyeDrop;
 
-        @Config.Comment({"Max time until next dye"})
-        @Config.LangKey("config.diy.sheep_drop_time_higher")
-        public int rngUpperBoundTime = 12000;
+    final public ConfigHelper.ConfigValueListener<Boolean> sheepEatFlowers;
 
-        @Config.Comment({"Min time until next dye"})
-        @Config.LangKey("config.diy.sheep_drop_time_lower")
-        public int rngLowerBoundTime = 6000;
+    final public ConfigHelper.ConfigValueListener<Boolean> sheepAbsorbColor;
 
-        @Config.Comment({"Maximum of dye sheeps should drop at the time"})
-        @Config.LangKey("config.diy.max_dye_drop")
-        @Config.RangeInt(min = 0)
-        public int maxDyeDrop = 2;
-
-        @Config.Comment({"Minimum of dye sheeps should drop at the time"})
-        @Config.LangKey("config.diy.min_dye_drop")
-        @Config.RangeInt(min = 0)
-        public int minDyeDrop = 1;
-    }
-
-    public static class ConfigGeneral {
-
-        @Config.Comment({"Sheeps should eat flowers"})
-        @Config.LangKey("config.diy.sheep_eat_flowers")
-        public boolean sheepEatFlowers = true;
-
-        @Config.Comment({"Sheeps should take the color of the flower they eat"})
-        @Config.LangKey("config.diy.sheep_absorb")
-        public boolean sheepAbsorbColor = true;
+    public ConfigHandler(ForgeConfigSpec.Builder builder, ConfigHelper.Subscriber subscriber) {
+        builder.push("general");
+        sheepEatFlowers = subscriber.subscribe(builder
+                .comment("Sheep eat flowers")
+                .translation("config.diy.sheep_eat_flowers")
+                .define("sheepEatFlowers", true)
+        );
+        sheepAbsorbColor = subscriber.subscribe(builder
+                .comment("Sheep take the color of flowers they eat")
+                .translation("config.diy.sheep_absorb")
+                .define("sheepAbsorbColor", true)
+        );
+        builder.push("dyeDropping");
+        doDropDye = subscriber.subscribe(builder
+                .comment("Sheep drop dye")
+                .translation("config.diy.sheep_drop_dye")
+                .define("dropDye", true)
+        );
+        rngUpperBoundTime = subscriber.subscribe(builder
+                .comment("Max time between dye drops")
+                .translation("config.diy.sheep_drop_time_higher")
+                .define("maxDropTime", 12000)
+        );
+        rngLowerBoundTime = subscriber.subscribe(builder
+                .comment("Min time between dye drops")
+                .translation("config.diy.sheep_drop_time_lower")
+                .define("minDropTime", 6000)
+        );
+        maxDyeDrop = subscriber.subscribe(builder
+                .comment("Max dye dropped at once")
+                .translation("config.diy.max_dye_drop")
+                .defineInRange("maxDyeDrop", 2, 0, Integer.MAX_VALUE)
+        );
+        minDyeDrop = subscriber.subscribe(builder
+                .comment("Min dye dropped at once")
+                .translation("config.diy.min_dye_drop")
+                .defineInRange("minDyeDrop", 1, 0, Integer.MAX_VALUE)
+        );
+        builder.pop();
     }
 }

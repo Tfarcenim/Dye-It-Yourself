@@ -1,33 +1,20 @@
 package xyz.poketech.diy;
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import xyz.poketech.diy.item.ItemDyeBrush;
+import net.minecraft.item.ItemGroup;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import xyz.poketech.diy.item.DyeBrushItem;
 
-@Mod.EventBusSubscriber(modid = DyeItYourself.MODID)
 public class DIYItems {
 
-    @GameRegistry.ObjectHolder(DyeItYourself.MODID + ":dye_brush")
-    public static ItemDyeBrush itemDyeBrush;
+    static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, DyeItYourself.MODID);
 
-    @SubscribeEvent
-    public static void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().register(new ItemDyeBrush());
-    }
+    public static final RegistryObject<Item> DYE_BRUSH = ITEMS.register("dye_brush", () ->
+            new DyeBrushItem(
+                    new Item.Properties().group(ItemGroup.TOOLS).maxStackSize(1)
+            )
+    );
 
-    @SideOnly(Side.CLIENT)
-    public static void initModels() {
-        ModelLoader.setCustomModelResourceLocation(
-                itemDyeBrush, 0,
-                new ModelResourceLocation(itemDyeBrush.getRegistryName(),
-                "inventory")
-        );
-    }
 }

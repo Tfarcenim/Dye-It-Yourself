@@ -1,7 +1,6 @@
 package xyz.poketech.diy.util;
 
 import org.apache.commons.lang3.RandomUtils;
-import xyz.poketech.diy.ConfigHandler;
 import xyz.poketech.diy.DyeItYourself;
 
 public class RandomUtil {
@@ -10,8 +9,8 @@ public class RandomUtil {
      * @return a time in tick until the next dye drop based on the config
      */
     public static int getNextDye() {
-        int min =ConfigHandler.dyeDrop.rngLowerBoundTime;
-        int max = ConfigHandler.dyeDrop.rngUpperBoundTime;
+        int min = DyeItYourself.CONFIG.rngLowerBoundTime.get();
+        int max = DyeItYourself.CONFIG.rngUpperBoundTime.get();
 
         if(min > max || max - min < 0) {
             DyeItYourself.LOGGER.error("Tried to get a random next dye time but min > max, min = " + min + " max = " + max);
@@ -21,8 +20,8 @@ public class RandomUtil {
     }
 
     public static int getDyeDropAmountSafe() {
-        int min =ConfigHandler.dyeDrop.minDyeDrop;
-        int max = ConfigHandler.dyeDrop.maxDyeDrop;
+        int min =DyeItYourself.CONFIG.minDyeDrop.get();
+        int max = DyeItYourself.CONFIG.maxDyeDrop.get();
 
         if(min > max || max - min < 0) {
             DyeItYourself.LOGGER.error("Tried to get a random amount of dye but min > max, min = " + min + " max = " + max);

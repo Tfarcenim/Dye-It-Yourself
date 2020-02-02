@@ -1,14 +1,12 @@
 package xyz.poketech.diy.util.color;
 
-import java.awt.Color;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.renderer.Vector3f;
+import net.minecraft.client.renderer.Vector4f;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
-
-
-import net.minecraft.client.renderer.GlStateManager;
+import java.awt.*;
 
 public final class ColorUtil {
 
@@ -18,7 +16,8 @@ public final class ColorUtil {
         return new Vector4f(rgba[0], rgba[1], rgba[2], rgba[3]);
     }
 
-    public static @Nonnull Vector3f toFloat(int rgb) {
+    public static @Nonnull
+    Vector3f toFloat(int rgb) {
         int r = rgb >> 16 & 255;
         int g = rgb >> 8 & 255;
         int b = rgb & 255;
@@ -54,7 +53,7 @@ public final class ColorUtil {
     }
 
     public static int getRGB(@Nonnull Vector3f rgb) {
-        return getRGB(rgb.x, rgb.y, rgb.z);
+        return getRGB(rgb.getX(), rgb.getY(), rgb.getZ());
     }
 
     public static int getRGB(float r, float g, float b) {
@@ -62,7 +61,7 @@ public final class ColorUtil {
     }
 
     public static int getRGBA(@Nonnull Vector4f col) {
-        return getRGBA(col.x, col.y, col.z, col.w);
+        return getRGBA(col.getX(), col.getY(), col.getZ(), col.getW());
     }
 
     public static int getRGBA(float r, float g, float b, float a) {
@@ -94,7 +93,7 @@ public final class ColorUtil {
         float red = (color >> 16 & 255) / 255.0F;
         float green = (color >> 8 & 255) / 255.0F;
         float blue = (color & 255) / 255.0F;
-        GlStateManager.color(red, green, blue, 1.0F);
+        RenderSystem.color4f(red, green, blue, 1.0F);
     }
 
     public static int toHex(int r, int g, int b) {

@@ -1,54 +1,51 @@
 package xyz.poketech.diy;
 
-import net.minecraft.launchwrapper.Launch;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import xyz.poketech.diy.proxy.CommonProxy;
+import xyz.poketech.diy.network.DistHelper;
+import xyz.poketech.diy.network.PacketHandler;
 
 @Mod.EventBusSubscriber
-@Mod(modid = DyeItYourself.MODID, name = DyeItYourself.NAME, version = DyeItYourself.VERSION, acceptedMinecraftVersions = DyeItYourself.VERSION_RANGE)
+@Mod(DyeItYourself.MODID)
 public final class DyeItYourself {
     public static final String MODID = "diy";
 
-    public static final String NAME = "Dye it yourself";
-    public static final String VERSION = "1.1.1";
-    public static final String VERSION_RANGE = "[1.12,1.13)";
-    public static final boolean DEV_MODE = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+    public static final String PROTOCOL_VERSION = "1";
 
-    public static final SimpleNetworkWrapper NETWORK = new SimpleNetworkWrapper(MODID);
-
-    private static final DyeItYourself INSTANCE = new DyeItYourself();
+    public static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(
+            new ResourceLocation(MODID, "main"),
+            () -> PROTOCOL_VERSION,
+            PROTOCOL_VERSION::equals,
+            PROTOCOL_VERSION::equals
+    );
 
     public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-    @SidedProxy(clientSide = "xyz.poketech.diy.proxy.ClientProxy", serverSide = "xyz.poketech.diy.proxy.CommonProxy")
-    private static CommonProxy proxy;
+    public static ConfigHandler CONFIG;
 
-    private DyeItYourself() {}
+    public DyeItYourself() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
-    @Mod.InstanceFactory
-    public static DyeItYourself getInstance() {
-        return INSTANCE;
+        DIYItems.ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        CONFIG = ConfigHelper.register(ModConfig.Type.SERVER, ConfigHandler::new);
     }
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent e){
-        proxy.preInit(e);
+    public void setup(FMLCommonSetupEvent e) {
+        PacketHandler.registerMessages();
     }
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent e) {
-        proxy.init(e);
-    }
-
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent e) {
-        proxy.postInit(e);
+    public void clientSetup(FMLClientSetupEvent e) {
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> DistHelper::addRenderLayers);
     }
 }

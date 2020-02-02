@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+issueTrackerURL="http://github.com/cazsius/dye-it-yourself/issues"
+
+[[mods]] #mandatory
+    modId="diy"
+    version="${file.jarVersion}"
+    displayName="Dye It Yourself"
+    updateJSONURL="http://raw.githubusercontent.com/Cazsius/Dye-It-Yourself/master/update.json"
+    displayURL="https:curseforge.com/minecraft/mc-mods/dye-it-yourself"
+    #logoFile="logo.png"
+    credits=""
+    authors="Poke1650, Cazsius, Willbl3pic"
+    description='''
+Lets the sheep dye themselves.
+'''
+
+[[dependencies.diy]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.diy]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

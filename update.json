@@ -1,0 +1,10 @@
+{
+  "homepage": "https://minecraft.curseforge.com/projects/dye-it-yourself",
+  "promos": {
+    "1.15.2-latest": "v1.2.0",
+    "1.15.2-recommended": "v1.2.0"
+  },
+  "1.15.2": {
+    "v1.2.0": "- Updated to 1.15.2.\n - Sheep now drop proper dyes, so no more bonemeal farms."
+  }
+}
