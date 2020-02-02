@@ -49,7 +49,7 @@ public class ConfigHandler {
         maxDyeDrop = subscriber.subscribe(builder
                 .comment("Max dye dropped at once")
                 .translation("config.diy.max_dye_drop")
-                .defineInRange("maxDyeDrop", 0, 2, Integer.MAX_VALUE)
+                .defineInRange("maxDyeDrop", 2, 0, Integer.MAX_VALUE)
         );
         minDyeDrop = subscriber.subscribe(builder
                 .comment("Min dye dropped at once")
