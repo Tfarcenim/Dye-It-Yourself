@@ -1,0 +1,39 @@
+{
+  "_comment": "========================================================================",
+  "_comment": "Config",
+  "_comment": "========================================================================",
+
+  "_comment": "General",
+  "config.dyeityourself.general": "General",
+  "config.dyeityourself.general.tooltip": "Configuración General",
+
+  "config.dyeityourself.sheep_eat_flowers": "Ovejas consumen flores",
+  "config.dyeityourself.sheep_eat_flowers.tooltip": "Ovejas pueden consumir flores",
+
+  "config.dyeityourself.sheep_absorb": "Ovejas toman color de flores",
+  "config.dyeityourself.sheep_absorb.tooltip": "Ovejas pueden tomar el color de la flor que consumen",
+
+  "_comment": "Dye droping",
+  "config.dyeityourself.dye_dropping": "Tintes",
+  "config.dyeityourself.dye_dropping.tooltip": "Configuración de tintes",
+
+  "config.dyeityourself.sheep_drop_dye": "Ovejas sueltan tinte",
+  "config.dyeityourself.sheep_drop_dye.tooltip": "Ovejas pueden soltar tinte",
+
+  "config.dyeityourself.max_dye_drop": "Cantidad máxima de tinte soltado",
+  "config.dyeityourself.max_dye_drop.tooltip": "Cantidad máxima de tinte que puede soltar una oveja de una vez",
+
+  "config.dyeityourself.min_dye_drop": "Cantidad mínima de tinte soltado",
+  "config.dyeityourself.min_dye_drop.tooltip": "Cantidad mínima de tinte que puede soltar una oveja de una vez",
+
+  "config.dyeityourself.sheep_drop_time_higher": "Tiempo máximo hasta el siguiente tinte",
+  "config.dyeityourself.sheep_drop_time_higher.tooltip": "Tiempo en ticks (default = huevos de gallina)",
+
+  "config.dyeityourself.sheep_drop_time_lower": "Tiempo mínimo hasta el siguiente tinte",
+  "config.dyeityourself.sheep_drop_time_lower.tooltip": "Tiempo en ticks (default = huevos de gallina)",
+
+
+  "tooltip.dyeityourself.current_color": "Color: R: %d G: %d B: %d",
+  "item.dyeityourself.dye_brush": "Brocha de tinte",
+  "item.dyeityourself.dye_brush.tooltip": "Click derecho mientras se esta agachado para cambiar el color y click izquierdo sobre una oveja para cambiar su color"
+}

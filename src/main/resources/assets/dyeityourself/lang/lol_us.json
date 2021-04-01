@@ -1,0 +1,39 @@
+{
+  "_comment": "========================================================================",
+  "_comment": "Config",
+  "_comment": "========================================================================",
+
+  "_comment": "General",
+  "config.dyeityourself.general": "Generul",
+  "config.dyeityourself.general.tooltip": "Generul confg",
+
+  "config.dyeityourself.sheep_eat_flowers": "Shep eat flowr",
+  "config.dyeityourself.sheep_eat_flowers.tooltip": "If Shep shuld eat flowr",
+
+  "config.dyeityourself.sheep_absorb": "Shep take flowr colurz",
+  "config.dyeityourself.sheep_absorb.tooltip": "Shep shuld take da colurz of da flowr dey eat",
+
+  "_comment": "Dye droping",
+  "config.dyeityourself.dye_dropping": "Powder drop",
+  "config.dyeityourself.dye_dropping.tooltip": "Powder drop",
+
+  "config.dyeityourself.sheep_drop_dye": "Shep shuld drop powder",
+  "config.dyeityourself.sheep_drop_dye.tooltip": "Shuld shep drop powder",
+
+  "config.dyeityourself.max_dye_drop": "Maximum powder droppd",
+  "config.dyeityourself.max_dye_drop.tooltip": "Maximum of powder shep shuld drop at da tiem",
+
+  "config.dyeityourself.min_dye_drop": "Minimum sku powder droppd",
+  "config.dyeityourself.min_dye_drop.tooltip": "Minimum of powder shep shuld drop at da tiem",
+
+  "config.dyeityourself.sheep_drop_time_higher": "Max tiem until next powder",
+  "config.dyeityourself.sheep_drop_time_higher.tooltip": "Tiem in tick (default = liek bawk bawk eggs)",
+
+  "config.dyeityourself.sheep_drop_time_lower": "Min tiem until next powder",
+  "config.dyeityourself.sheep_drop_time_lower.tooltip": "Tiem in tick (default = liek bawk bawk eggs)",
+
+
+  "tooltip.dyeityourself.current_color": "Colurz: R: %d G: %d B: %d",
+  "item.dyeityourself.dye_brush": "Powder Fuzzy Stik",
+  "item.dyeityourself.dye_brush.tooltip": "Righty clicz while tiptoe tu change da colurz and righty clicz tu culurd a shep"
+}

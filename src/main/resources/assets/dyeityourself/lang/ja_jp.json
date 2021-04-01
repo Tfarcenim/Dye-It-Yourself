@@ -1,0 +1,38 @@
+{
+  "_comment": "========================================================================",
+  "_comment": "Config",
+  "_comment": "========================================================================",
+
+  "_comment": "General",
+  "config.dyeityourself.general": "一般",
+  "config.dyeityourself.general.tooltip": "一般の設定",
+
+  "config.dyeityourself.sheep_eat_flowers": "羊が花を食う",
+  "config.dyeityourself.sheep_eat_flowers.tooltip": "羊は花を食べれる",
+
+  "config.dyeityourself.sheep_absorb": "羊は花の色を吸い込む",
+  "config.dyeityourself.sheep_absorb.tooltip": "羊は食べた花の色に変わる",
+
+  "_comment": "Dye droping",
+  "config.dyeityourself.dye_dropping": "染料ドロップ",
+  "config.dyeityourself.dye_dropping.tooltip": "染料のドロップに関係する設定",
+
+  "config.dyeityourself.sheep_drop_dye": "羊の染料ドロップ",
+  "config.dyeityourself.sheep_drop_dye.tooltip": "羊は染料をドロップできる",
+
+  "config.dyeityourself.max_dye_drop.tooltip": "羊から最大限のドロップ",
+  "config.dyeityourself.max_dye_drop": "染料ドロップの最大限",
+
+  "config.dyeityourself.min_dye_drop.tooltip": "羊から最小限のドロップ",
+  "config.dyeityourself.min_dye_drop": "染料ドロップの最小限",
+
+  "config.dyeityourself.sheep_drop_time_higher": "次の染料ドロップまで最大期限",
+  "config.dyeityourself.sheep_drop_time_higher.tooltip": "チック数（デフォルトとは鶏の産卵の同じ）",
+  "config.dyeityourself.sheep_drop_time_lower": "次の染料ドロップまで最小期限",
+  "config.dyeityourself.sheep_drop_time_lower.tooltip": "チック数（デフォルトとは鶏の産卵の同じ）",
+
+
+  "tooltip.dyeityourself.current_color": "色： 赤：%d 緑：%d 青：%d",
+  "item.dyeityourself.dye_brush": "染料の筆",
+  "item.dyeityourself.dye_brush.tooltip": "スニーク中で左クリックすると色を切り替える。右クリックすると羊を染める。"
+}

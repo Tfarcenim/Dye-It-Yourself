@@ -1,0 +1,39 @@
+{
+  "_comment": "========================================================================",
+  "_comment": "Config",
+  "_comment": "========================================================================",
+
+  "_comment": "General",
+  "config.dyeityourself.general": "General",
+  "config.dyeityourself.general.tooltip": "General config",
+
+  "config.dyeityourself.sheep_eat_flowers": "Sheep eat flower",
+  "config.dyeityourself.sheep_eat_flowers.tooltip": "If Sheep should eat flowers",
+
+  "config.dyeityourself.sheep_absorb": "Sheep take flower color",
+  "config.dyeityourself.sheep_absorb.tooltip": "Sheep should take the color of the flower they eat",
+
+  "_comment": "Dye dropping",
+  "config.dyeityourself.dye_dropping": "Dye drop",
+  "config.dyeityourself.dye_dropping.tooltip": "Dye drop",
+
+  "config.dyeityourself.sheep_drop_dye": "Sheep should drop dye",
+  "config.dyeityourself.sheep_drop_dye.tooltip": "Should sheep drop dye",
+
+  "config.dyeityourself.max_dye_drop": "Maximum dye dropped",
+  "config.dyeityourself.max_dye_drop.tooltip": "Maximum of dye Sheep should drop at the time",
+
+  "config.dyeityourself.min_dye_drop": "Minimum dye dropped",
+  "config.dyeityourself.min_dye_drop.tooltip": "Minimum of dye Sheep should drop at the time",
+
+  "config.dyeityourself.sheep_drop_time_higher": "Max time until next dye",
+  "config.dyeityourself.sheep_drop_time_higher.tooltip": "Time in tick (default = like chicken eggs)",
+
+  "config.dyeityourself.sheep_drop_time_lower": "Min time until next dye",
+  "config.dyeityourself.sheep_drop_time_lower.tooltip": "Time in tick (default = like chicken eggs)",
+
+
+  "tooltip.dyeityourself.current_color": "Color: R: %d G: %d B: %d",
+  "item.dyeityourself.dye_brush": "Dye Brush",
+  "item.dyeityourself.dye_brush.tooltip": "Right click while sneaking to change the color and right click to dye a sheep"
+}
